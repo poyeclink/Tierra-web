@@ -23,5 +23,5 @@ const orderGateway =
 export const useCases = {
   getMenu: makeGetMenu(menuRepository),
   getEstablishment: makeGetEstablishment(localEstablishmentRepository),
-  placeOrder: makePlaceOrder(orderGateway),
+  placeOrder: makePlaceOrder(orderGateway, menuRepository),
 };

@@ -2,9 +2,9 @@ import type { OrderGateway } from "@/core/ordering/domain/order.gateway";
 import type { ToastConfig } from "./toast.config";
 
 /**
- * Adapter: domain OrderDraft -> Toast order.
+ * Adapter: domain PricedOrder -> Toast order.
  *
- * TODO (phase 3): map OrderDraft to the Toast order payload (menu item GUIDs,
+ * TODO (phase 3): map PricedOrder to the Toast order payload (menu item GUIDs,
  * dining option, customer) and map the response to PlacedOrder.
  */
 export function createToastOrderGateway(config: ToastConfig): OrderGateway {

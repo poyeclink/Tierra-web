@@ -7,7 +7,7 @@ export function MenuCategoryNav({ categories }: { categories: readonly MenuCateg
         {categories.map((category) => (
           <li key={category.id}>
             <a
-              href={`#${category.id}`}
+              href={`#menu-${category.id}`}
               className="inline-block rounded-full border border-line px-4 py-1.5 text-sm transition-colors hover:border-aqua hover:bg-tint"
             >
               {category.name}

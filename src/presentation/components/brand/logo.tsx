@@ -36,7 +36,7 @@ export function Logo({ variant = "principal", color = "full-color", width, prior
       alt="Tierra Coffee"
       width={safeWidth}
       height={Math.round(safeWidth * ratio)}
-      priority={priority}
+      preload={priority}
       unoptimized
       className={className}
     />

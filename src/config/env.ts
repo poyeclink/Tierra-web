@@ -3,7 +3,8 @@ import "server-only";
 import type { ToastConfig } from "@/infrastructure/toast/toast.config";
 
 function oneOf<T extends string>(name: string, allowed: readonly T[], fallback: T): T {
-  const value = process.env[name] ?? fallback;
+  // `||`, not `??`: an empty `MENU_SOURCE=` line in .env must fall back too.
+  const value = process.env[name] || fallback;
   if (!allowed.includes(value as T)) {
     throw new Error(`${name} must be one of: ${allowed.join(", ")}. Got "${value}".`);
   }

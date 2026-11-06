@@ -1,6 +1,6 @@
-import type { OrderDraft, PlacedOrder } from "./order";
+import type { PlacedOrder, PricedOrder } from "./order";
 
 /** Port: system that receives orders (Toast POS). */
 export interface OrderGateway {
-  placeOrder(draft: OrderDraft): Promise<PlacedOrder>;
+  placeOrder(order: PricedOrder): Promise<PlacedOrder>;
 }

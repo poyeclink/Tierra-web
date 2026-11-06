@@ -24,12 +24,73 @@
   --color-ink-muted: color-mix(in srgb, var(--color-text) 80%, var(--color-bg));
   --color-line: color-mix(in srgb, var(--color-text) 15%, var(--color-bg));
   --color-tint: color-mix(in srgb, var(--brand-aqua) 6%, var(--color-bg));
+  --color-paper: var(--brand-white);
+  --color-aqua-soft: color-mix(in srgb, var(--brand-aqua) 18%, var(--color-bg));
   --font-sans: var(--font-body);
+}
+
+/* Motion: calm, slow-out easing. */
+@theme {
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  --animate-rise: rise 1.2s var(--ease-calm) both;
+  --animate-scroll-cue: scroll-cue 2.4s var(--ease-calm) infinite;
+  --animate-settle: settle 2.4s var(--ease-calm) both;
+
+  @keyframes settle {
+    from {
+      transform: scale(1.12);
+    }
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    45% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    55% {
+      transform: scaleY(1);
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+  }
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background: var(--color-aqua-soft);
+    color: var(--color-text);
+  }
+
+  /* Visible focus everywhere; aqua sections switch the ring to white. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring, var(--brand-crimson));
+    outline-offset: 3px;
   }
 
   body {
@@ -51,5 +112,89 @@
     font-size: var(--text-h2);
     font-weight: var(--weight-medium);
     line-height: 1.2;
+  }
+}
+
+/* Mobile menu open (site-nav.tsx): lock page scroll, only where the menu exists. */
+@media (width < 48rem) {
+  html[data-menu-open] {
+    overflow: hidden;
+  }
+}
+
+/*
+ * Scroll reveal (see presentation/components/ui/reveal.tsx).
+ * Content is only hidden when JS runs and the user accepts motion,
+ * so it is always readable without scripts.
+ */
+@media screen and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 1s var(--ease-calm),
+      transform 1s var(--ease-calm);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal][data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Jatina pairs: words start apart and meet in the middle. */
+  .converge .converge-left,
+  .converge .converge-right {
+    transition: transform 1.4s var(--ease-calm);
+    transition-delay: calc(var(--reveal-delay, 0ms) + 150ms);
+  }
+
+  .converge:not([data-visible]) .converge-left {
+    transform: translateX(-2.5rem);
+  }
+
+  .converge:not([data-visible]) .converge-right {
+    transform: translateX(2.5rem);
+  }
+
+  /* Photographs: unveiled bottom-up while the image settles from a slight zoom.
+     The clip goes on the child: a clipped observer target never intersects. */
+  .unveil[data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .unveil[data-reveal] > * {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.4s var(--ease-calm);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .unveil[data-reveal] img {
+    transform: scale(1.15);
+    transition: transform 2.2s var(--ease-calm);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .unveil[data-reveal][data-visible] > * {
+    clip-path: inset(0);
+  }
+
+  .unveil[data-reveal][data-visible] img {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

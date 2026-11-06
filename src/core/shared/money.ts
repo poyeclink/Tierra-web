@@ -1,7 +1,7 @@
 import { DomainError } from "./errors";
 
 /**
- * Monetary value stored in minor units (cents) to avoid floating point errors.
+ * Monetary value stored in minor units (cents for USD) to avoid floating point errors.
  * `currency` is an ISO 4217 code, e.g. "USD".
  */
 export type Money = {
@@ -16,9 +16,19 @@ export function money(amount: number, currency: string): Money {
   return { amount, currency };
 }
 
-/** Builds Money from a major-unit value such as 4.5 -> 450 cents. */
+/** Decimal places of a currency's minor unit (USD 2, JPY 0, KWD 3). */
+export function minorUnitDigits(currency: string): number {
+  return new Intl.NumberFormat("en", { style: "currency", currency }).resolvedOptions().maximumFractionDigits ?? 2;
+}
+
+/** Builds Money from a major-unit value such as 4.5 USD -> 450 cents. */
 export function moneyFromMajorUnits(value: number, currency: string): Money {
-  return money(Math.round(value * 100), currency);
+  return money(Math.round(value * 10 ** minorUnitDigits(currency)), currency);
+}
+
+/** Major-unit value of Money, e.g. 450 cents -> 4.5 USD. */
+export function toMajorUnits(value: Money): number {
+  return value.amount / 10 ** minorUnitDigits(value.currency);
 }
 
 export function addMoney(a: Money, b: Money): Money {
