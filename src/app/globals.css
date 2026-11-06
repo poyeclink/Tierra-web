@@ -1,0 +1,55 @@
+@import "tailwindcss";
+/* Source of truth for colors and type: brand-assets/tokens/tokens.css */
+@import "../../brand-assets/tokens/tokens.css";
+
+/*
+ * next/font gives Satoshi a hashed family name, exposed as --font-satoshi
+ * (src/app/layout.tsx). Point the body token at it, keeping the token's fallbacks.
+ */
+:root {
+  --font-body: var(--font-satoshi), system-ui, sans-serif;
+}
+
+/*
+ * Tailwind utilities mapped to brand tokens (bg-aqua, text-ink, border-line…).
+ * Names differ from the token names on purpose to avoid self-references.
+ * Derived shades are mixed from tokens, never new hex values.
+ */
+@theme inline {
+  --color-aqua: var(--brand-aqua);
+  --color-crimson: var(--brand-crimson);
+  --color-canvas: var(--color-bg);
+  --color-on-crimson: var(--brand-white);
+  --color-ink: var(--color-text);
+  --color-ink-muted: color-mix(in srgb, var(--color-text) 80%, var(--color-bg));
+  --color-line: color-mix(in srgb, var(--color-text) 15%, var(--color-bg));
+  --color-tint: color-mix(in srgb, var(--brand-aqua) 6%, var(--color-bg));
+  --font-sans: var(--font-body);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-weight: var(--weight-regular);
+  }
+
+  /* Brand hierarchy: h1 Black ≥ 300 % of body, h2 Medium 200 %. */
+  h1 {
+    font-size: var(--text-h1);
+    font-weight: var(--weight-black);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-medium);
+    line-height: 1.2;
+  }
+}

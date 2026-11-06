@@ -1,0 +1,31 @@
+/* Tierra Coffee — design tokens
+   Fuente: Brand Identity Guidelines (Sep 2026). No usar hex sueltos fuera de este archivo. */
+:root {
+  /* Paleta */
+  --brand-aqua: #2ea589;      /* Primario dominante · Pantone 3435 C */
+  --brand-crimson: #bb0d2f;   /* Primario de acento · Pantone 200 C */
+  --brand-white: #ffffff;
+  --brand-neutral: #454545;   /* PROPUESTA, por validar: gris de los logos en escala de grises */
+  --brand-gray-light: #7e7e7e;/* Solo para logos en escala de grises */
+
+  /* Roles */
+  --color-primary: var(--brand-aqua);   /* No usar para texto normal sobre blanco (3.06:1) */
+  --color-accent: var(--brand-crimson);
+  --color-text: var(--brand-neutral);
+  --color-bg: var(--brand-white);
+  --color-on-primary: var(--brand-white); /* Solo texto grande sobre aqua */
+
+  /* Tipografía */
+  --font-body: "Satoshi", system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-black: 900;
+
+  /* Escala: h1 ≥ 300 % del cuerpo, h2 = 200 % */
+  --text-base: 1rem;
+  --text-h2: 2rem;
+  --text-h1: 3rem;
+
+  /* Logo */
+  --logo-min-width: 75.6px; /* 2 cm */
+}

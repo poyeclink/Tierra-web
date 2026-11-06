@@ -1,0 +1,43 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencias y builds de Next.js
+node_modules/
+.next/
+out/
+build/
+coverage/
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# Generado desde brand-assets/ por scripts/sync-brand-assets.mjs
+public/brand/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Variables de entorno: nunca se suben (.env.example sí)
+.env
+.env*.local
+.env.development
+.env.production
+*.pem
+
+# Editores y ajustes locales
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.claude/settings.local.json
+
+# Archivos fuente pesados de diseño: viven en OneDrive, no en el repo
+*.ai
+*.psd
+*.zip
