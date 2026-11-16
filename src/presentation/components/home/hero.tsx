@@ -33,7 +33,7 @@ export function Hero() {
       </Container>
 
       <a
-        href="#frases"
+        href="#ritual"
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 text-[0.65rem] font-medium tracking-[0.3em] text-ink-muted uppercase [@media(min-height:760px)]:lg:flex"
       >
         Descubre

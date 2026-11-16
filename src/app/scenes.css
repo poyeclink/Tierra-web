@@ -1,0 +1,203 @@
+/*
+ * Scroll-driven scenes of the home page.
+ *
+ * Each scene is an element with [data-scene] whose scroll progress (0 → 1) is written to
+ * `--p` by presentation/components/ui/scroll-scene.tsx. Everything below only applies when
+ * motion is allowed and JS runs (same query as the `motion-js` variant); otherwise the
+ * markup renders its final, static layout.
+ *
+ * Only transforms, opacity and clip-path change per frame: no layout work while scrolling.
+ */
+
+/* Horizontal principles track: sizes are shared by the static (native scroll) and pinned layouts. */
+.hscroll {
+  --panel: min(78vw, 27rem);
+  --intro: min(86vw, 32rem);
+  --gap: clamp(1rem, 2vw, 1.75rem);
+  --pad: max(1.25rem, calc((100vw - 80rem) / 2 + 2rem));
+  --distance: calc(var(--pad) * 2 + var(--intro) + var(--count, 6) * (var(--panel) + var(--gap)) - 100vw);
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 38rem) {
+  [data-scene] {
+    --p: 0;
+  }
+
+  /* ---------------------------------------------------------------- Jatina */
+  .jatina-title {
+    transform: translate3d(calc((0.5 - var(--p)) * 12vw), 0, 0);
+  }
+
+  .jatina-arch {
+    transform: translate3d(0, calc((0.5 - var(--p)) * 14%), 0);
+  }
+
+  .jatina-arch-media {
+    transform: scale(calc(1.25 - var(--p) * 0.25));
+  }
+
+  .jatina-pair {
+    /* Words meet just before the row reaches the middle of the screen. */
+    --c: clamp(0, calc(var(--p) * 3 - 0.35), 1);
+  }
+
+  .jatina-pair .from-left,
+  .jatina-pair .from-right {
+    opacity: calc(0.15 + var(--c) * 0.85);
+  }
+
+  .jatina-pair .from-left {
+    transform: translate3d(calc((1 - var(--c)) * -16vw), 0, 0);
+  }
+
+  .jatina-pair .from-right {
+    transform: translate3d(calc((1 - var(--c)) * 16vw), 0, 0);
+  }
+
+  .jatina-pair .pill {
+    clip-path: inset(0 calc((1 - var(--c)) * 50%) round 999px);
+  }
+
+  .jatina-pair .pill > * {
+    transform: scale(calc(1.4 - var(--c) * 0.4));
+  }
+
+  .jatina-pair .plus {
+    transform: rotate(calc(var(--c) * 180deg)) scale(calc(0.6 + var(--c) * 0.4));
+  }
+
+  /* ---------------------------------------------------------------- Statements marquee */
+  .marquee-shift-a {
+    transform: translate3d(calc((0.5 - var(--p)) * 30vw), 0, 0);
+  }
+
+  .marquee-shift-b {
+    transform: translate3d(calc((var(--p) - 0.5) * 30vw), 0, 0);
+  }
+
+  /* ---------------------------------------------------------------- Principles (horizontal) */
+  .hscroll {
+    height: calc(100svh - 5rem + var(--distance));
+  }
+
+  .hscroll-track {
+    transform: translate3d(calc(var(--p) * var(--distance) * -1), 0, 0);
+  }
+
+  .hscroll-media {
+    /* Each photo drifts against the track: parallax inside its own frame. */
+    transform: translate3d(calc((var(--p) * var(--count, 6) - var(--i, 0) - 0.5) * -5%), 0, 0) scale(1.18);
+  }
+
+  .hscroll-bar {
+    transform: scaleX(var(--p));
+  }
+
+  /* ---------------------------------------------------------------- Manifesto */
+  .manifesto-texture {
+    transform: translate3d(0, calc((0.5 - var(--p)) * 18%), 0);
+  }
+
+  .manifesto-float {
+    transform: translate3d(0, calc((0.5 - var(--p)) * var(--speed, 30vh)), 0) rotate(var(--tilt, 0deg));
+  }
+
+  /* ---------------------------------------------------------------- El ritual (zoom collage) */
+  .zoom {
+    --z: clamp(0, calc((var(--p) - 0.1) / 0.55), 1);
+    --t: clamp(0, calc((var(--p) - 0.66) / 0.24), 1);
+    /*
+     * Centre tile before it opens up: it lives in the space *below* the heading, whose
+     * real height (--head, measured by scroll-scene.tsx) changes with the screen width.
+     * Preferred width --tw (4:5), shrunk if the space left under the heading is shorter.
+     */
+    --tw: 54vw;
+    --stage-h: calc(100svh - 5rem);
+    --top: calc(var(--head, 12rem) + 2rem);
+    --avail: calc(var(--stage-h) - var(--top) - 1.5rem);
+    --th: min(calc(var(--tw) * 1.25), var(--avail));
+    --tw-fit: calc(var(--th) * 0.8);
+    --ty: calc(var(--top) + (var(--avail) - var(--th)) / 2);
+  }
+
+  .zoom-head {
+    opacity: clamp(0, calc(1 - var(--z) * 2.2), 1);
+    transform: translate3d(0, calc(var(--z) * -3rem), 0);
+  }
+
+  .zoom-hero {
+    clip-path: inset(
+      calc((1 - var(--z)) * var(--ty)) calc((1 - var(--z)) * (50% - var(--tw-fit) / 2))
+        calc((1 - var(--z)) * (var(--stage-h) - var(--ty) - var(--th))) round calc((1 - var(--z)) * 2rem)
+    );
+  }
+
+  .zoom-hero-media {
+    transform: scale(calc(1.3 - var(--z) * 0.3));
+  }
+
+  .zoom-shade {
+    opacity: var(--t);
+  }
+
+  .zoom-tile {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    opacity: clamp(0, calc(1 - var(--z) * 1.6), 1);
+    transform: translate3d(
+        calc(var(--dx) * (var(--z) * 55vw + (0.5 - var(--p)) * 4vw)),
+        calc(var(--dy) * (var(--z) * 45vh + (0.5 - var(--p)) * 6vh)),
+        0
+      )
+      scale(calc(1 + var(--z) * 0.35));
+  }
+
+  .zoom-word {
+    opacity: clamp(0, calc(var(--t) * 6 - var(--i) * 0.9), 1);
+    transform: translate3d(0, calc((1 - clamp(0, calc(var(--t) * 6 - var(--i) * 0.9), 1)) * 1.5rem), 0);
+  }
+
+  @media (min-width: 1024px) {
+    .zoom {
+      --tw: 24vw;
+    }
+
+    .zoom-tile {
+      left: var(--x-lg);
+      top: var(--y-lg);
+      width: var(--w-lg);
+    }
+  }
+
+  /* ---------------------------------------------------------------- Visit (expanding photo) */
+  .visit {
+    --e: clamp(0, calc(var(--p) * 1.9), 1);
+    --k: clamp(0, calc((var(--p) - 0.45) * 3.5), 1);
+  }
+
+  .visit-media {
+    clip-path: inset(
+      calc((1 - var(--e)) * 12%) calc((1 - var(--e)) * 20%) round calc((1 - var(--e)) * 2.5rem)
+    );
+  }
+
+  .visit-media img {
+    transform: scale(calc(1.25 - var(--e) * 0.25));
+  }
+
+  .visit-shade {
+    opacity: calc(0.35 + var(--e) * 0.65);
+  }
+
+  .visit-copy {
+    opacity: clamp(0, calc((var(--p) - 0.3) * 4), 1);
+    transform: translate3d(0, calc((1 - clamp(0, calc((var(--p) - 0.3) * 4), 1)) * 2.5rem), 0);
+  }
+
+  .visit-card {
+    opacity: var(--k);
+    transform: translate3d(0, calc((1 - var(--k)) * 4rem), 0) scale(calc(0.96 + var(--k) * 0.04));
+  }
+}

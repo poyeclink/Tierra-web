@@ -21,6 +21,7 @@ Instrucciones para cualquier agente de código (Claude Code, Cursor, Codex, etc.
 | `docs/brand/` | Concepto, identidad visual, voz, inventario de assets y pendientes |
 | `docs/referencias/` | Dónde están los archivos fuente (PDF, AI, PSD) |
 | `brand-assets/` | Logos, íconos, frases, texturas, tokens y notas de fuentes, listos para usar en la web |
+| `design/ritual-3d/` | Escena de Blender (script) de la sección con scroll "Del grano a la taza" del inicio. Sus frames se exportan a `public/ritual/` con `scripts/export-ritual-frames.mjs` |
 
 ## Reglas
 

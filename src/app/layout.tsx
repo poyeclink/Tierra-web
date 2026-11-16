@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import { siteConfig } from "@/config/site";
 import { getEstablishment } from "@/presentation/data/establishment";
 import "./globals.css";
+// Scroll-driven scenes of the home page (plain CSS, no Tailwind directives).
+import "./scenes.css";
 
 // Satoshi (Fontshare, ITF Free Font License: see fonts/Satoshi-LICENSE.txt).
 // Variable font covering the brand weights 400 / 500 / 900.

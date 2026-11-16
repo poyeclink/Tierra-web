@@ -32,6 +32,66 @@ export const heroContent = {
   badgeText: "Stay grounded · Calm. Brewed. · Coffee & calm · ",
 };
 
+/**
+ * "Del grano a la taza": the section after the hero, a 3D sequence scrubbed by scroll (ritual-sequence.tsx).
+ * Frames are rendered from design/ritual-3d/build_scene.py and exported by
+ * scripts/export-ritual-frames.mjs. Bump `version` whenever they are re-rendered:
+ * the folder is served with an immutable cache (next.config.ts).
+ */
+const RITUAL_VERSION = "v2";
+const ritualFrame = (set: "l" | "s", index: number) =>
+  `/ritual/${RITUAL_VERSION}/${set}/${String(index).padStart(3, "0")}.webp`;
+
+export const ritualFrames = {
+  /** Frames rendered (0…count-1). */
+  count: 121,
+  /** `step`: only every n-th frame exists in that set. */
+  large: { size: 1000, step: 1, src: (index: number) => ritualFrame("l", index) },
+  small: { size: 600, step: 2, src: (index: number) => ritualFrame("s", index) },
+} as const;
+
+/**
+ * One beat per stage of the sequence. `from` is the scroll progress (0–1) where the
+ * beat takes over; `still` is the frame shown when the sequence cannot animate.
+ * Copy follows docs/brand/01-concepto.md and 03-voz-y-mensajes.md; nothing here is business data.
+ */
+export const ritualSequenceContent = { label: "Del grano a la taza" };
+
+export const ritualBeats = [
+  {
+    id: "origen",
+    label: "Origen",
+    from: 0,
+    still: 0,
+    title: "Todo empieza en el origen.",
+    text: "Raíces latinoamericanas, inspiración japonesa.",
+  },
+  {
+    id: "precision",
+    label: "Precisión",
+    from: 0.22,
+    still: 52,
+    title: "Cada detalle, pensado.",
+    text: "La técnica y la calidad como parte de la experiencia.",
+  },
+  {
+    id: "ritual",
+    label: "Ritual",
+    from: 0.5,
+    still: 80,
+    title: "Sin prisa. Con intención.",
+    text: "Agua, tiempo y atención. Un gesto simple que se vuelve ritual.",
+  },
+  {
+    id: "calma",
+    label: "Calma",
+    from: 0.8,
+    still: 120,
+    title: "Tu momento de calma.",
+    text: "Una pausa para conectar con lo esencial.",
+  },
+] as const;
+
 /** docs/brand/03-voz-y-mensajes.md — "Frases oficiales". White variants, for aqua backgrounds. */
 export const brandStatements: readonly BrandArt[] = [
   frase("stay-grounded", "Stay grounded", 360.19, 164.52),
@@ -63,7 +123,8 @@ export const jatinaContent = {
 /** docs/brand/01-concepto.md — Propuesta gastronómica. */
 export const offeringContent = {
   eyebrow: "Propuesta",
-  title: "Sabores de dos orígenes",
+  /** "Sabores de dos orígenes", split into the lines it is revealed in. */
+  titleLines: ["Sabores de", "dos orígenes"],
   lead: "Café de especialidad, matcha, postres y bebidas inspiradas en sabores japoneses y latinoamericanos.",
   items: [
     { title: "Café de especialidad", text: "Origen y precisión en cada taza.", icon: icon("taza-humeante"), photo: photos.latteArt },
@@ -75,7 +136,23 @@ export const offeringContent = {
 
 export const heroPhoto = photos.pourOver;
 export const jatinaPhoto = photos.interiorTables;
+/** Small photos set inside each Jatina pair, in the same order as `jatinaContent.pairs`. */
+export const jatinaPairPhotos: readonly Photo[] = [photos.chemex, photos.cappuccino, photos.coffeeCherries];
 export const visitPhoto = photos.interiorWindow;
+
+/** docs/brand/01-concepto.md — Principios. The principles themselves come from establishment data. */
+export const principlesContent = {
+  eyebrow: "Principios",
+  title: "Cada detalle, con intención",
+  lead: "Seis ideas que guían cada taza, cada espacio y cada encuentro.",
+};
+
+/** Photos floating around the manifesto (decorative). */
+export const manifestoPhotos: readonly Photo[] = [photos.espressoLight, photos.beans, photos.flatlay];
+
+export const visitContent = {
+  lead: "Un espacio para hacer una pausa, conversar y conectar con lo esencial.",
+};
 
 /** Icon for each principle title in establishment data (docs/brand/01-concepto.md). */
 export const principleIcons: Record<string, string> = {

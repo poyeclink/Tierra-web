@@ -16,6 +16,10 @@ next-env.d.ts
 # Generado desde brand-assets/ por scripts/sync-brand-assets.mjs
 public/brand/
 
+# Renders intermedios de Blender (los WebP finales sí se suben: public/ritual/)
+design/ritual-3d/render/
+*.blend1
+
 # Logs
 *.log
 npm-debug.log*
