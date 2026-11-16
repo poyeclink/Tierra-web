@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 type ButtonLinkProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "ghost";
+  variant?: keyof typeof VARIANTS;
   className?: string;
 };
 
@@ -13,6 +13,8 @@ const VARIANTS = {
   primary:
     "bg-crimson text-on-crimson shadow-[0_10px_30px_-12px_var(--brand-crimson)] hover:shadow-[0_16px_36px_-12px_var(--brand-crimson)] hover:-translate-y-0.5",
   ghost: "border border-aqua text-ink hover:bg-tint",
+  // For dark sections (bg-deep): white outline that fills on hover.
+  inverse: "border border-paper/60 text-paper hover:bg-paper hover:text-deep",
 } as const;
 
 export function ButtonLink({ href, children, variant = "primary", className = "" }: ButtonLinkProps) {

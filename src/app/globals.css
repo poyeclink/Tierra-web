@@ -26,7 +26,20 @@
   --color-tint: color-mix(in srgb, var(--brand-aqua) 6%, var(--color-bg));
   --color-paper: var(--brand-white);
   --color-aqua-soft: color-mix(in srgb, var(--brand-aqua) 18%, var(--color-bg));
+  /* Deep teal for dark sections: white text on it is 6.8:1. */
+  --color-deep: color-mix(in srgb, var(--brand-aqua) 28%, var(--color-text));
   --font-sans: var(--font-body);
+}
+
+/*
+ * Motion allowed + JS running + a viewport tall enough to pin a stage.
+ * Keep in sync with MOTION_QUERY (ui/scroll-scene.tsx), ENHANCED (ritual-sequence.tsx)
+ * and the media query in scenes.css.
+ */
+@custom-variant motion-js {
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 38rem) {
+    @slot;
+  }
 }
 
 /* Motion: calm, slow-out easing. */
@@ -37,6 +50,13 @@
   --animate-rise: rise 1.2s var(--ease-calm) both;
   --animate-scroll-cue: scroll-cue 2.4s var(--ease-calm) infinite;
   --animate-settle: settle 2.4s var(--ease-calm) both;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes float {
+    50% {
+      transform: translateY(-0.5rem);
+    }
+  }
 
   @keyframes settle {
     from {
@@ -142,19 +162,20 @@
     transform: none;
   }
 
-  /* Jatina pairs: words start apart and meet in the middle. */
-  .converge .converge-left,
-  .converge .converge-right {
-    transition: transform 1.4s var(--ease-calm);
-    transition-delay: calc(var(--reveal-delay, 0ms) + 150ms);
+  /* Headings: each line rises out of a mask (wrap lines in .mask-line > span). */
+  .mask-reveal[data-reveal] {
+    opacity: 1;
+    transform: none;
   }
 
-  .converge:not([data-visible]) .converge-left {
-    transform: translateX(-2.5rem);
+  .mask-reveal[data-reveal] .mask-line > * {
+    transform: translateY(105%);
+    transition: transform 1.2s var(--ease-calm);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--line, 0) * 110ms);
   }
 
-  .converge:not([data-visible]) .converge-right {
-    transform: translateX(2.5rem);
+  .mask-reveal[data-reveal][data-visible] .mask-line > * {
+    transform: none;
   }
 
   /* Photographs: unveiled bottom-up while the image settles from a slight zoom.
@@ -182,6 +203,49 @@
 
   .unveil[data-reveal][data-visible] img {
     transform: none;
+  }
+}
+
+/*
+ * Scroll sequence (presentation/components/home/ritual-sequence.tsx).
+ * Frames have a transparent background: the mask feathers the square so nothing
+ * is ever cut by a hard edge.
+ */
+.ritual-frame {
+  mask-image:
+    linear-gradient(to right, transparent, black 5%, black 95%, transparent),
+    linear-gradient(to bottom, transparent, black 4%, black 96%, transparent);
+  mask-composite: intersect;
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 38rem) {
+  /* Beats share one cell and cross-fade; the script moves data-state as you scroll. */
+  .ritual-beat {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 0.6s var(--ease-calm),
+      transform 0.9s var(--ease-calm);
+  }
+
+  .ritual-beat[data-state="past"] {
+    transform: translateY(-1.75rem);
+  }
+
+  .ritual-beat[data-state="active"] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition-delay: 0.15s;
+  }
+
+  .ritual-cue {
+    transition: opacity 0.6s var(--ease-calm);
+  }
+
+  [data-started] .ritual-cue {
+    opacity: 0;
   }
 }
 

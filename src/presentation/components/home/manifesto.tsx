@@ -52,7 +52,7 @@ export function ManifestoText() {
           style={
             {
               "--i": index,
-              opacity: "clamp(0.16, calc(var(--p) * var(--n) * 1.2 - var(--i)), 1)",
+              opacity: "clamp(0.22, calc(var(--p) * var(--n) * 1.2 - var(--i)), 1)",
             } as CSSProperties
           }
         >

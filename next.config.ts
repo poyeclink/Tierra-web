@@ -12,6 +12,17 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/photo-*", search: "?auto=format&fit=max&w=2400&q=80" },
     ],
   },
+  async headers() {
+    // Scroll-sequence frames live in a versioned folder (RITUAL_VERSION in content/home.ts).
+    // Not in dev: frames get re-exported under the same names while iterating.
+    if (process.env.NODE_ENV !== "production") return [];
+    return [
+      {
+        source: "/ritual/:version/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
+  },
   turbopack: {
     rules: {
       "*.css": {
